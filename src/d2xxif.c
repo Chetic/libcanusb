@@ -323,26 +323,21 @@ bool readFrame( FT_HANDLE ftHandle, CANMsg *frame )
   
   // Check if there is something to receive
   if ( FT_OK == FT_GetStatus( ftHandle, &nRxCnt, &nTxCnt, &eventStatus ) ) {
-    
     // If there are characters to receive
     if ( nRxCnt ) {
-
       // Must fit to buffer
       if ( nRxCnt > sizeof( gbufferRx ) ) {
 	nRxCnt = sizeof( gbufferRx );
       }
-      
       // Read data
       if ( ( FT_OK == FT_Read( ftHandle, gbufferRx, nRxCnt, &nRcvCnt ) ) 
 	   && ( nRcvCnt > 0 ) ) {
 	
 	for ( i=0; i<nRcvCnt; i++ ) {
-
 	  // Get character
 	  c = gbufferRx[ i ];
 	  
 	  if ( CANUSB_STATE_NONE == state ) {
-	    
 	    if ( ('t' == c ) || 
 		 ( 'T' == c ) || 
 		 ('r' == c ) || 
@@ -352,15 +347,10 @@ bool readFrame( FT_HANDLE ftHandle, CANMsg *frame )
 	      msgReceiveBuf[ 0 ] = c;
 	      cntMsgRcv = 1;
 	    }
-	    
 	  }
-	  
 	  else if ( CANUSB_STATE_MSG == state ) {
-	    
 	    msgReceiveBuf[ cntMsgRcv++ ] = c;
-	    
 	    if ( 0x0d == c ) {
-	   
 	      printf("Raw Msg = %s\n", msgReceiveBuf );
 	      if ( !canusbToCanMsg( (CANMsg*)msgReceiveBuf, (char*)&msg ) ) {
 		printf("Message conversion failed!\n");
@@ -381,32 +371,22 @@ bool readFrame( FT_HANDLE ftHandle, CANMsg *frame )
 		     (unsigned int)msg.timestamp ); 
 	      
 	      if ( msg.len ) {
-		
 		printf("data=");
-		
 		for ( j=0; j<msg.len; j++ ) {
 		  printf("%02X ", msg.data[j]);
 		}
-	 
 	      }
 
 	      printf("\n");
-
 	      gnReceivedFrames++;
-
 	      state = CANUSB_STATE_NONE;
-	      
 	    } // full message
-
 	  } // STATE_MSG
-
 	} // for each char
-
       } // Read data
-
     } // characters to receive
-
   } // getstatus
-    
+
+  if (cntMsgRcv == 0) frame = NULL; 
   return true;
 }

@@ -33,11 +33,9 @@ int canusb_init(int iport)
     printf("WARNING: FT_SetTimeouts failed. ftStatus=%d\n", (int)ftStatus);
   }
      
-  while ( 0x0a == ( c = getchar() ));
-
   if (filtersConfigured) {
-	init_failed |= sendDeviceMsg(ftHandle, strACR);
-	init_failed |= sendDeviceMsg(ftHandle, strACM);
+	init_failed |= !sendDeviceMsg(ftHandle, strACR);
+	init_failed |= !sendDeviceMsg(ftHandle, strACM);
   }
 
   return init_failed;
