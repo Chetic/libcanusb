@@ -140,11 +140,15 @@ void canusb_print_serial_number(void)
 
 void canusb_enable_timestamps(void)
 {
-	canusb_send_cmd("Z1\r");
+	if (!sendDeviceMsg(ftHandle, "Z1\r")) {
+		printf("WARNING: Unable to enable timestamps\n");
+	}
 }
 
 void canusb_disable_timestamps(void)
 {
-	canusb_send_cmd("Z0\r");
+	if (!sendDeviceMsg(ftHandle, "Z0\r")) {
+		printf("WARNING: Unable to enable timestamps\n");
+	}
 }
 
