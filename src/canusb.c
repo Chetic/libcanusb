@@ -55,7 +55,11 @@ int canusb_send_frame(CANMsg* frame)
 
 int canusb_get_frame(CANMsg* frame)
 {
-  return readFrame(ftHandle, frame);
+  if (!readFrame(ftHandle, frame)) {
+    printf("WARNING: Error while attempting to read frame\n");
+    return 0;
+  }
+  return (frame != NULL);
 }
 
 void canusb_set_filter11(int id, int idmask, int rtr, int rtrmask, int data, int datamask, int id2, int idmask2, int rtr2, int rtrmask2)

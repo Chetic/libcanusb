@@ -2,7 +2,7 @@
 CC := gcc
 LD := gcc
 AR := ar
-CCFLAGS := -c -ggdb -O0
+CCFLAGS := -c -ggdb -O0 -g
 LDFLAGS := -g -Llib
 LIB_OBJS := obj/d2xxif.o obj/canusb.o
 
