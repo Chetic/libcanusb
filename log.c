@@ -13,7 +13,6 @@ int log_init(void)
         printf("Error opening file!\n");
         return -1;
     }
-    log_write("%c", 0x37);
     return 0;
 }
 
@@ -26,6 +25,6 @@ void log_write(const char* format, ...)
 {
     va_list argptr;
     va_start(argptr, format);
-    fprintf(f, format, argptr);
+    vfprintf(f, format, argptr);
     va_end(argptr);
 }
