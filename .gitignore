@@ -1,0 +1,3 @@
+*.o
+canusb
+test_log
