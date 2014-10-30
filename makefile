@@ -14,7 +14,7 @@ canusb: main.o $(O_FILES)
 clean:
 	rm test_log || :
 	rm canusb || :
-	rm $(O_FILES) || :
+	rm *.o || :
 
 %.o: %.c
 	$(CC) $(CCFLAGS) $^ -o $@

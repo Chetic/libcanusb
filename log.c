@@ -2,11 +2,11 @@
 #include <stdarg.h>
 #include "log.h"
 
-FILE *f;
+static FILE *f;
 
 int log_init(void)
 {
-    f = fopen("file.txt", "w");
+    f = fopen("log.txt", "w");
 
     if (f == NULL)
     {

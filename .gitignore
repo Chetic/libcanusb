@@ -1,3 +1,4 @@
 *.o
 canusb
 test_log
+log.txt
