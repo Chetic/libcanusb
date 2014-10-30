@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
 		if (nread = fread(buf, 1, sizeof buf, file) > 0)
 		{
 			printf("Data read: %s\n", buf);
-			if (strcmp("1337", buf))
+			if (strcmp("1337", buf) == 0)
 			{
 				success = 1;
 			}
@@ -29,9 +29,9 @@ int main(int argc, char* argv[])
 	}
 	
 	if (success)
-		printf("Success!");
+		printf("Success!\n");
 	else
-		printf("Test failed.");
+		printf("Test failed.\n");
 
 	return (success == 1);
 }
