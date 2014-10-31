@@ -1,20 +1,24 @@
-CC := gcc
-LD := gcc
+.PHONY: clean
+
+CC := arm-unknown-linux-gnueabi-gcc
+LD := arm-unknown-linux-gnueabi-gcc
 CCFLAGS := -c -ggdb -O0
-O_FILES := serial.o canusb.o log.o
+O_FILES := obj/serial.o obj/canusb.o obj/log.o
 
-all: test_log canusb
+all: obj bin bin/test_log bin/canusb
 
-test_log: test_log.o $(O_FILES)
+bin/test_log: obj/test_log.o $(O_FILES)
 	$(LD) -g $^ -o $@
 
-canusb: main.o $(O_FILES)
+bin/canusb: obj/main.o $(O_FILES)
 	$(LD) -g $^ -o $@
+
+obj bin:
+	mkdir -p $@
 
 clean:
-	rm test_log || :
-	rm canusb || :
-	rm *.o || :
+	rm -rf bin || :
+	rm -rf obj || :
 
-%.o: %.c
+obj/%.o: src/%.c obj
 	$(CC) $(CCFLAGS) $^ -o $@
