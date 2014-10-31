@@ -29,6 +29,7 @@ obj bin lib:
 clean:
 	rm -rf bin || :
 	rm -rf obj || :
+	rm -rf lib || :
 
 obj/%.o: src/%.c obj
 	$(CC) $(CCFLAGS) $^ -o $@
