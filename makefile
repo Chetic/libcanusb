@@ -31,5 +31,5 @@ clean:
 	rm -rf obj || :
 	rm -rf lib || :
 
-obj/%.o: src/%.c obj
+obj/%.o: src/%.c
 	$(CC) $(CCFLAGS) $^ -o $@

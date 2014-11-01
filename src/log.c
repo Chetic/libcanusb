@@ -3,6 +3,7 @@
 #include "log.h"
 
 static FILE *f;
+static char buf[LOG_BUFFER_SIZE];
 
 int log_init(void)
 {
@@ -25,6 +26,11 @@ void log_write(const char* format, ...)
 {
     va_list argptr;
     va_start(argptr, format);
-    vfprintf(f, format, argptr);
+
+    //Store to buffer and print to both logfile and stdout:
+    vsprintf(buf, format, argptr);
+    fprintf(f, buf);
+    printf(buf);
+
     va_end(argptr);
 }

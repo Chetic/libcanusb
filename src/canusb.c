@@ -12,9 +12,9 @@
 
 char buf[1024];
 
-int canusb_init(void)
+int canusb_init(char* portname)
 {
-        return serial_init();
+        return serial_init(portname);
 }
 
 int canusb_send_cmd(char* cmd)
