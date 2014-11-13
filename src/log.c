@@ -31,6 +31,7 @@ void log_write(const char* format, ...)
     vsprintf(buf, format, argptr);
     fprintf(f, buf);
     printf(buf);
+	fflush(stdout);
 
     va_end(argptr);
 }

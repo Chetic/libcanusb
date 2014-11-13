@@ -3,3 +3,6 @@ canusb
 test_log
 log.txt
 *.a
+bin/*
+lib/*
+obj/*

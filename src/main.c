@@ -15,13 +15,6 @@ void sig_handler(int signo) {
 		s_running = 0;
 }
 
-void shutdown()
-{
-	log_write("\rClosing CAN channel... \t\t");
-	canusb_send_cmd("C\r");
-	log_close();
-}
-
 int main(int argc, char* argv[]) {
 	log_init();
 
@@ -36,21 +29,33 @@ int main(int argc, char* argv[]) {
 		log_write("\ncan't catch SIGINT\n");
 
 	canusb_init(argv[1]);
-	canusb_print_version();
 
+	log_write("Version:\t");
+	canusb_print_version();
+	log_write("Serial number:\t");
+	canusb_print_serial_number();
+	log_write("Status flags:\t");
+	canusb_print_status();
+
+	log_write("Disabling timestamps... \t");
+	canusb_disable_timestamps();
+	log_write("Setting acceptance code... \t");
+	canusb_send_cmd("M00001D60\r");
+	log_write("Setting acceptance mask... \t");
+	canusb_send_cmd("m00001FF0\r");
 	log_write("Setting CANUSB to 100kbps... \t");
 	canusb_send_cmd("S3\r");
-
 	log_write("Opening CAN channel... \t\t");
 	canusb_send_cmd("O\r");
 
 	while (s_running) //key not pressed
 	{
-		canusb_read();
-		fflush(stdout);
+		canusb_poll();
 	}
 
-	shutdown();
+	log_write("\rClosing CAN channel... \t\t");
+	canusb_send_cmd("C\r");
+	log_close();
 
 	return 0;
 }

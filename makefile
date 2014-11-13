@@ -1,16 +1,16 @@
 .PHONY: clean
-ifeq ($(shell uname -a | grep armv6),)
-CC := arm-unknown-linux-gnueabi-gcc
-LD := arm-unknown-linux-gnueabi-gcc
-AR := arm-unknown-linux-gnueabi-ar
-else
+#ifeq ($(shell uname -a | grep armv6),)
+#CC := arm-unknown-linux-gnueabi-gcc
+#LD := arm-unknown-linux-gnueabi-gcc
+#AR := arm-unknown-linux-gnueabi-ar
+#else
 CC := gcc
 LD := gcc
 AR := ar
-endif
+#endif
 CCFLAGS := -c -ggdb -O0
 LDFLAGS := -g -Llib
-LIB_OBJS := obj/serial.o obj/canusb.o obj/log.o
+LIB_OBJS := obj/serial.o obj/canusb.o obj/log.o obj/circbuf.o
 
 all: obj bin lib lib/libcanusb.a bin/test_log bin/canusb
 
