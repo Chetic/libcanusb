@@ -1,4 +1,3 @@
-#include <stdlib.h>
 #include <stdio.h>
 #include "log.h"
 
@@ -11,7 +10,7 @@ int main(int argc, char* argv[])
 	FILE* file;
 
 	log_init();
-        log_write("%d", 1337);
+    log_write("%d", 1337);
 	log_close();
 
 	file = fopen("log.txt", "r");
