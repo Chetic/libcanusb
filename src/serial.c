@@ -10,10 +10,12 @@
 static int fd;
 static char s_portname[MAX_PORTNAME_LENGTH];
 
-void serial_set_blocking(int fd, int should_block) {
+void serial_set_blocking(int fd, int should_block)
+{
 	struct termios tty;
 	memset(&tty, 0, sizeof tty);
-	if (tcgetattr(fd, &tty) != 0) {
+	if (tcgetattr(fd, &tty) != 0)
+	{
 		printf("error %d from tggetattr", errno);
 		return;
 	}
@@ -25,10 +27,12 @@ void serial_set_blocking(int fd, int should_block) {
 		printf("error %d setting term attributes", errno);
 }
 
-int serial_set_interface_attribs(int fd, int speed, int parity) {
+int serial_set_interface_attribs(int fd, int speed, int parity)
+{
 	struct termios tty;
 	memset(&tty, 0, sizeof tty);
-	if (tcgetattr(fd, &tty) != 0) {
+	if (tcgetattr(fd, &tty) != 0)
+	{
 		printf("error %d from tcgetattr", errno);
 		return -1;
 	}
@@ -55,23 +59,27 @@ int serial_set_interface_attribs(int fd, int speed, int parity) {
 	tty.c_cflag &= ~CSTOPB;
 	tty.c_cflag &= ~CRTSCTS;
 
-	if (tcsetattr(fd, TCSANOW, &tty) != 0) {
+	if (tcsetattr(fd, TCSANOW, &tty) != 0)
+	{
 		printf("error %d from tcsetattr", errno);
 		return -1;
 	}
 	return 0;
 }
 
-int serial_init(char* portname) {
-	if (strlen(portname) > MAX_PORTNAME_LENGTH) {
+int serial_init(char* portname)
+{
+	if (strlen(portname) > MAX_PORTNAME_LENGTH)
+	{
 		log_write("Error: Serial port name too long. Maximum length %d",
-				MAX_PORTNAME_LENGTH);
+		MAX_PORTNAME_LENGTH);
 		return -1;
 	}
 	strcpy(s_portname, portname);
 	fd = open(portname, O_RDWR | O_NOCTTY | O_SYNC);
 
-	if (fd < 0) {
+	if (fd < 0)
+	{
 		log_write("error %d opening %s: %s", errno, portname, strerror(errno));
 		return -1;
 	}
@@ -82,10 +90,12 @@ int serial_init(char* portname) {
 	return 0;
 }
 
-void serial_write(char* data, int length) {
+void serial_write(char* data, int length)
+{
 	write(fd, data, strlen(data));
 }
 
-int serial_read(char* data, int maxLength) {
+int serial_read(char* data, int maxLength)
+{
 	return read(fd, data, maxLength);
 }

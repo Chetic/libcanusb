@@ -5,17 +5,20 @@
 
 static int s_running = 1;
 
-void sig_handler(int signo) {
+void sig_handler(int signo)
+{
 	if (signo == SIGINT)
 		s_running = 0;
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
 	log_init();
 
 	if (argc < 2)
 	{
-		log_write("Too few arguments. Please provide the path to your serial port (e.g. /dev/ttyUSB0)");
+		log_write(
+				"Too few arguments. Please provide the path to your serial port (e.g. /dev/ttyUSB0)");
 		log_close();
 		exit(1);
 	}

@@ -7,31 +7,31 @@ static char buf[LOG_BUFFER_SIZE];
 
 int log_init(void)
 {
-    f = fopen("log.txt", "w");
+	f = fopen("log.txt", "w");
 
-    if (f == NULL)
-    {
-        printf("Error opening file!\n");
-        return -1;
-    }
-    return 0;
+	if (f == NULL)
+	{
+		printf("Error opening file!\n");
+		return -1;
+	}
+	return 0;
 }
 
 void log_close(void)
 {
-    fclose(f);
+	fclose(f);
 }
 
 void log_write(const char* format, ...)
 {
-    va_list argptr;
-    va_start(argptr, format);
+	va_list argptr;
+	va_start(argptr, format);
 
-    //Store to buffer and print to both logfile and stdout:
-    vsprintf(buf, format, argptr);
-    fprintf(f, buf);
-    printf(buf);
+	//Store to buffer and print to both logfile and stdout:
+	vsprintf(buf, format, argptr);
+	fprintf(f, buf);
+	printf(buf);
 	fflush(stdout);
 
-    va_end(argptr);
+	va_end(argptr);
 }

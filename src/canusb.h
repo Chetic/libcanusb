@@ -3,12 +3,13 @@
 
 typedef struct
 {
-	union {
+	union
+	{
 		unsigned short id;
 		unsigned char length;
 	};
-    unsigned char data[8];
-    unsigned short timestamp;
+	unsigned char data[8];
+	unsigned short timestamp;
 } CANFrame;
 
 // id - 2 bytes & 0x0FFF

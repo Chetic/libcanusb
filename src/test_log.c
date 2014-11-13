@@ -10,7 +10,7 @@ int main(int argc, char* argv[])
 	FILE* file;
 
 	log_init();
-    log_write("%d", 1337);
+	log_write("%d", 1337);
 	log_close();
 
 	file = fopen("log.txt", "r");
@@ -24,9 +24,9 @@ int main(int argc, char* argv[])
 				success = 1;
 			}
 		}
-	    	fclose(file);
+		fclose(file);
 	}
-	
+
 	if (success)
 		printf("Success!\n");
 	else
