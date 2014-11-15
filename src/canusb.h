@@ -3,11 +3,8 @@
 
 typedef struct
 {
-	union
-	{
-		unsigned short id;
-		unsigned char length;
-	};
+	unsigned short id;
+	unsigned char length;
 	unsigned char data[8];
 	unsigned short timestamp;
 } CANFrame;
@@ -23,6 +20,7 @@ extern void canusb_print_version(void);
 extern void canusb_print_serial_number(void);
 extern void canusb_enable_timestamps(void);
 extern void canusb_disable_timestamps(void);
+extern CANFrame* canusb_get_frame(unsigned int index);
 
 /** To be called regularly. Reads and parses CAN frames */
 extern void canusb_poll(void);

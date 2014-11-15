@@ -25,7 +25,7 @@ int circbuf_add(char* data, int len)
 	{
 		strncpy(s_parse_buffer + s_start_idx, data, len);
 	}
-	s_end_idx += len % CIRCBUF_MAX_LENGTH;
+	s_end_idx = (s_end_idx + len) % CIRCBUF_MAX_LENGTH;
 	s_length += len;
 
 	return len;
@@ -37,7 +37,8 @@ int circbuf_remove(int len)
 	{
 		len = s_length;
 	}
-	s_start_idx += len % CIRCBUF_MAX_LENGTH;
+	s_start_idx = (s_start_idx + len) % CIRCBUF_MAX_LENGTH;
+	s_length -= len;
 
 	return len;
 }
