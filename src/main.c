@@ -46,9 +46,24 @@ int main(int argc, char* argv[])
 	log_write("Opening CAN channel... \t\t");
 	canusb_send_cmd("O\r");
 
-	while (s_running) //key not pressed
+	while (s_running)
 	{
-		canusb_poll();
+		int i;
+		CANFrame* frame;
+		int n;
+
+		n = canusb_poll();
+
+		for (i = 0; i < n; i++)
+		{
+			frame = canusb_get_frame(i);
+
+			if (frame->id == 0x1D6)
+			{
+				log_write("Steering wheel: %02x%02x\n", frame->data[0], frame->data[1]);
+			}
+		}
+		canusb_reset();
 	}
 
 	log_write("\rClosing CAN channel... \t\t");

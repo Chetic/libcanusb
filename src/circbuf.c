@@ -8,7 +8,7 @@ static char s_parse_buffer[CIRCBUF_MAX_LENGTH];
 
 int circbuf_add(char* data, int len)
 {
-	int space_left_before_wrap = CIRCBUF_MAX_LENGTH - s_start_idx;
+	int space_left_before_wrap = CIRCBUF_MAX_LENGTH - s_end_idx;
 
 	if (s_length + len > CIRCBUF_MAX_LENGTH)
 	{
@@ -17,13 +17,13 @@ int circbuf_add(char* data, int len)
 
 	if (len > space_left_before_wrap)
 	{
-		strncpy(s_parse_buffer + s_start_idx, data, space_left_before_wrap);
+		strncpy(s_parse_buffer + s_end_idx, data, space_left_before_wrap);
 		strncpy(s_parse_buffer, data + space_left_before_wrap,
 				len - space_left_before_wrap);
 	}
 	else
 	{
-		strncpy(s_parse_buffer + s_start_idx, data, len);
+		strncpy(s_parse_buffer + s_end_idx, data, len);
 	}
 	s_end_idx = (s_end_idx + len) % CIRCBUF_MAX_LENGTH;
 	s_length += len;

@@ -6,11 +6,19 @@
 int test_parsing(void)
 {
 	int i;
-	char* data = "tABC80001020304050607FFFF";
+	char *frame1_data[] = {"tAB", "C80", "0010203", "04050607F", "FFF"};
+	char *frame2_data = "tABC80001020304050607FFFF";
 	CANFrame* frame;
 
-	circbuf_add(data, strlen(data));
-	canusb_parse();
+	for (i = 0; i < 4; i++)
+	{
+		circbuf_add(frame1_data[i], strlen(frame1_data[i]));
+		canusb_parse();
+	}
+	circbuf_add(frame1_data[4], strlen(frame1_data[4]));
+	circbuf_add(frame2_data, strlen(frame2_data));
+	if (canusb_parse() != 2)
+		return 0;
 
 	frame = canusb_get_frame(0);
 	if (frame)

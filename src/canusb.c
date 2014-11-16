@@ -19,8 +19,14 @@ static char s_buf[SERIAL_BUFFER_LENGTH];
 static int s_frame_buffer_index = -1;
 static CANFrame s_frame_buffer[CANFRAME_BUFFER_LENGTH];
 
+void canusb_reset(void)
+{
+	s_frame_buffer_index = -1;
+}
+
 int canusb_init(char* portname)
 {
+	canusb_reset();
 	return serial_init(portname);
 }
 
@@ -122,9 +128,10 @@ unsigned int ascii_to_hex(char c)
 	return -1;
 }
 
-void canusb_parse(void)
+int canusb_parse(void)
 {
 	int i, di;
+	int bufidx_pre_parse = s_frame_buffer_index;
 	static CANFrame s_currentFrame;
 
 	while (circbuf_len())
@@ -183,12 +190,13 @@ void canusb_parse(void)
 		}
 		i++;
 	}
+	return s_frame_buffer_index - bufidx_pre_parse;
 }
 
-void canusb_poll(void)
+int canusb_poll(void)
 {
 	canusb_read();
-	canusb_parse();
+	return canusb_parse();
 }
 
 CANFrame* canusb_get_frame(unsigned int index)
