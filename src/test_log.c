@@ -6,7 +6,7 @@ int main(int argc, char* argv[])
 	const int x = 1337;
 	char buf[1024];
 	size_t nread;
-	int success = 0;
+	int success = 1;
 	FILE* file;
 
 	log_init();
@@ -16,13 +16,20 @@ int main(int argc, char* argv[])
 	file = fopen("log.txt", "r");
 	if (file)
 	{
-		if (nread = fread(buf, 1, sizeof buf, file) > 0)
+		if (nread = fread(buf, 1, sizeof buf, file))
 		{
-			printf("Data read: %s\n", buf);
-			if (strcmp("1337", buf) == 0)
+			int i;
+			char* correctStr = "1337";
+
+			for (i = 0; i < nread; i++)
 			{
-				success = 1;
+				printf("%02x ", buf[i]);
+				if (buf[i] != correctStr[i])
+				{
+					success = 0;
+				}
 			}
+			printf("\n");
 		}
 		fclose(file);
 	}
