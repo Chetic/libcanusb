@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
 	if (argc < 2)
 	{
 		log_write(
-				"Too few arguments. Please provide the path to your serial port (e.g. /dev/ttyUSB0)");
+				"Too few arguments. Please provide the path to your serial port (e.g. /dev/ttyUSB0)\n");
 		log_close();
 		exit(1);
 	}
