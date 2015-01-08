@@ -61,6 +61,13 @@ int main(int argc, char* argv[])
 			if (frame->id == 0x1D6)
 			{
 				log_write("Steering wheel: %02x%02x\n", frame->data[0], frame->data[1]);
+
+				if ((frame->data[0] & 0x01))
+					system("./playpause.sh");
+				if ((frame->data[0] & 0x20))
+					system("./next.sh");
+				if ((frame->data[0] & 0x10))
+					system("./prev.sh");
 			}
 		}
 		canusb_reset();
