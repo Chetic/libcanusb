@@ -28,9 +28,9 @@ void log_write(const char* format, ...)
 	va_start(argptr, format);
 
 	//Store to buffer and print to both logfile and stdout:
-	vsprintf(buf, format, argptr);
-	fprintf(f, buf);
-	printf(buf);
+	vsnprintf (buf, LOG_BUFFER_SIZE, format, argptr);
+	fputs(buf, f);
+	fputs(buf, stdout);
 	fflush(stdout);
 
 	va_end(argptr);
