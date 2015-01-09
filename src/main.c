@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include <signal.h>
-#include "log.h"
 #include "canusb.h"
 
 static int s_running = 1;
@@ -13,37 +12,35 @@ void sig_handler(int signo)
 
 int main(int argc, char* argv[])
 {
-	log_init();
-
 	if (argc < 2)
 	{
-		log_write(
+		printf(
 				"Too few arguments. Please provide the path to your serial port (e.g. /dev/ttyUSB0)\n");
 		log_close();
 		exit(1);
 	}
 
 	if (signal(SIGINT, sig_handler) == SIG_ERR)
-		log_write("\ncan't catch SIGINT\n");
+		printf("\ncan't catch SIGINT\n");
 
 	canusb_init(argv[1]);
 
-	log_write("Version:\t");
+	printf("Version:\t");
 	canusb_print_version();
-	log_write("Serial number:\t");
+	printf("Serial number:\t");
 	canusb_print_serial_number();
-	log_write("Status flags:\t");
+	printf("Status flags:\t");
 	canusb_print_status();
 
-	log_write("Disabling timestamps... \t");
+	printf("Disabling timestamps... \t");
 	canusb_disable_timestamps();
-	log_write("Setting acceptance code... \t");
+	printf("Setting acceptance code... \t");
 	canusb_send_cmd("M00001D60\r");
-	log_write("Setting acceptance mask... \t");
+	printf("Setting acceptance mask... \t");
 	canusb_send_cmd("m00001FF0\r");
-	log_write("Setting CANUSB to 100kbps... \t");
+	printf("Setting CANUSB to 100kbps... \t");
 	canusb_send_cmd("S3\r");
-	log_write("Opening CAN channel... \t\t");
+	printf("Opening CAN channel... \t\t");
 	canusb_send_cmd("O\r");
 
 	while (s_running)
@@ -60,7 +57,7 @@ int main(int argc, char* argv[])
 
 			if (frame->id == 0x1D6)
 			{
-				log_write("Steering wheel: %02x%02x\n", frame->data[0], frame->data[1]);
+				printf("Steering wheel: %02x%02x\n", frame->data[0], frame->data[1]);
 
 				if ((frame->data[0] & 0x01))
 					system("./playpause.sh");
@@ -73,7 +70,7 @@ int main(int argc, char* argv[])
 		canusb_reset();
 	}
 
-	log_write("\rClosing CAN channel... \t\t");
+	printf("\rClosing CAN channel... \t\t");
 	canusb_send_cmd("C\r");
 	log_close();
 

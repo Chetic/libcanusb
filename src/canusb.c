@@ -1,6 +1,6 @@
 #include <string.h>
+#include <stdio.h>
 #include "serial.h"
-#include "log.h"
 #include "canusb.h"
 #include "circbuf.h"
 
@@ -38,19 +38,19 @@ int canusb_send_cmd(char* cmd)
 	usleep(100000);
 	n = serial_read(s_buf, sizeof s_buf);
 
-	log_write("[ ");
+	printf("[ ");
 	for (i = 0; i < n; i++)
 	{
 		if (s_buf[i] == 7)
-			log_write("ERR ");
+			printf("ERR ");
 		else if (s_buf[i] == 10)
-			log_write("OK (10) ");
+			printf("OK (10) ");
 		else if (s_buf[i] == 13)
-			log_write("OK (13) ");
+			printf("OK (13) ");
 		else
-			log_write("%d ", s_buf[i]);
+			printf("%d ", s_buf[i]);
 	}
-	log_write("]\n");
+	printf("]\n");
 }
 
 void canusb_print_version(void)
@@ -61,8 +61,8 @@ void canusb_print_version(void)
 	usleep(1000000); //TODO: Wait appropriate amount
 	bytes_read = serial_read(s_buf, sizeof s_buf);
 
-	log_write("CANUSB ");
-	log_write("%s\n", s_buf);
+	printf("CANUSB ");
+	printf("%s\n", s_buf);
 }
 
 void canusb_print_serial_number(void)
@@ -73,7 +73,7 @@ void canusb_print_serial_number(void)
 	usleep(1000000); //TODO: Wait appropriate amount
 	bytes_read = serial_read(s_buf, sizeof s_buf);
 
-	log_write("%s\n", s_buf);
+	printf("%s\n", s_buf);
 }
 
 void canusb_print_status(void)
@@ -84,7 +84,7 @@ void canusb_print_status(void)
 	usleep(1000000); //TODO: Wait appropriate amount
 	bytes_read = serial_read(s_buf, sizeof s_buf);
 
-	log_write("%s\n", s_buf);
+	printf("%s\n", s_buf);
 }
 
 void canusb_enable_timestamps(void)
@@ -102,7 +102,7 @@ void canusb_read(void)
 	int n;
 	char* bufSearch;
 	n = serial_read(s_buf, sizeof s_buf);
-	log_write("%s", s_buf);
+	printf("%s", s_buf);
 	circbuf_add(s_buf, n);
 }
 

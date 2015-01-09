@@ -71,7 +71,7 @@ int serial_init(char* portname)
 {
 	if (strlen(portname) > MAX_PORTNAME_LENGTH)
 	{
-		log_write("Error: Serial port name too long. Maximum length %d",
+		printf("Error: Serial port name too long. Maximum length %d",
 		MAX_PORTNAME_LENGTH);
 		return -1;
 	}
@@ -80,7 +80,7 @@ int serial_init(char* portname)
 
 	if (fd < 0)
 	{
-		log_write("error %d opening %s: %s", errno, portname, strerror(errno));
+		printf("error %d opening %s: %s", errno, portname, strerror(errno));
 		return -1;
 	}
 
