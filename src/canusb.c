@@ -130,7 +130,8 @@ unsigned int ascii_to_hex(char c)
 
 int canusb_parse(void)
 {
-	int i, di;
+	static int i;
+	static int di;
 	int bufidx_pre_parse = s_frame_buffer_index;
 	static CANFrame s_currentFrame;
 
@@ -174,7 +175,7 @@ int canusb_parse(void)
 			break;
 
 		case TIMESTAMP:
-			di = i - (1 + FLDLEN_ID + FLDLEN_LENGTH + s_currentFrame.length);
+			di = i - (1 + FLDLEN_ID + FLDLEN_LENGTH + s_currentFrame.length*2);
 			s_currentFrame.timestamp |= (ascii_to_hex(c)
 					<< 4 * (FLDLEN_TIMESTAMP - 1 - di));
 			if (i == FLDLEN_ID + FLDLEN_LENGTH + s_currentFrame.length * 2 + FLDLEN_TIMESTAMP)
