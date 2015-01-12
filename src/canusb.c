@@ -26,8 +26,13 @@ void canusb_reset(void)
 
 int canusb_init(char* portname)
 {
+	int ret;
 	canusb_reset();
-	return serial_init(portname);
+	ret = serial_init(portname);
+	usleep(100000);
+	serial_write("\r\r\r", 3);
+	serial_read(s_buf, sizeof s_buf);
+	return ret;
 }
 
 int canusb_send_cmd(char* cmd)
@@ -99,10 +104,13 @@ void canusb_disable_timestamps(void)
 
 void canusb_read(void)
 {
-	int n;
+	int n, i;
 	char* bufSearch;
 	n = serial_read(s_buf, sizeof s_buf);
-	printf("%s", s_buf);
+	for (i = 0; i < n; i++)
+	{
+		printf("%c", s_buf[i]);
+	}
 	circbuf_add(s_buf, n);
 }
 
