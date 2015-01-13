@@ -16,7 +16,7 @@ void serial_set_blocking(int fd, int should_block)
 	memset(&tty, 0, sizeof tty);
 	if (tcgetattr(fd, &tty) != 0)
 	{
-		printf("error %d from tggetattr", errno);
+		printf("Error %d from tggetattr\n", errno);
 		return;
 	}
 
@@ -33,7 +33,7 @@ int serial_set_interface_attribs(int fd, int speed, int parity)
 	memset(&tty, 0, sizeof tty);
 	if (tcgetattr(fd, &tty) != 0)
 	{
-		printf("error %d from tcgetattr", errno);
+		printf("Error %d from tcgetattr\n", errno);
 		return -1;
 	}
 
@@ -71,7 +71,7 @@ int serial_init(char* portname)
 {
 	if (strlen(portname) > MAX_PORTNAME_LENGTH)
 	{
-		printf("Error: Serial port name too long. Maximum length %d",
+		printf("Error: Serial port name too long. Maximum length %d\n",
 		MAX_PORTNAME_LENGTH);
 		return -1;
 	}
@@ -80,7 +80,7 @@ int serial_init(char* portname)
 
 	if (fd < 0)
 	{
-		printf("error %d opening %s: %s", errno, portname, strerror(errno));
+		printf("Error %d opening %s: %s\n", errno, portname, strerror(errno));
 		return -1;
 	}
 
