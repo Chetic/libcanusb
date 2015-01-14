@@ -39,6 +39,18 @@ int canusb_send_cmd(char* cmd)
 {
 	int n, i;
 
+	printf("[");
+	for (i = 0; i < strlen(cmd); i++)
+	{
+		if(cmd[i] == '\r')
+			printf("\\r", cmd[i]);
+		else if(cmd[i] == '\n')
+			printf("\\n", cmd[i]);
+		else
+			printf("%c", cmd[i]);
+	}
+	printf("]");
+
 	serial_write(cmd, strlen(cmd));
 	usleep(100000);
 	n = serial_read(s_buf, sizeof s_buf);
