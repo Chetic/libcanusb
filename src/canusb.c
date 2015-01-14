@@ -58,6 +58,18 @@ int canusb_send_cmd(char* cmd)
 	printf("]\n");
 }
 
+void canusb_filter_id(unsigned short id)
+{
+	char code_cmd[] = "M00000000\r";
+	char mask_cmd[] = "m00000010\r"; //Ignore RTR bit
+	id <<= 5;
+
+	sprintf(code_cmd+5, "%03x", id);
+
+	canusb_send_cmd(code_cmd);
+	canusb_send_cmd(mask_cmd);
+}
+
 void canusb_print_version(void)
 {
 	int bytes_read;

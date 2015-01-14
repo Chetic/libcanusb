@@ -17,6 +17,10 @@ typedef struct
 extern void canusb_reset(void);
 extern int canusb_init(char* portname);
 extern int canusb_send_cmd(char* cmd);
+
+/** Set adapter to only print CAN messages with ID 'id'. Only supports 11-bit identifiers */
+extern void canusb_filter_id(unsigned short id);
+
 extern void canusb_print_version(void);
 extern void canusb_print_serial_number(void);
 extern void canusb_enable_timestamps(void);
