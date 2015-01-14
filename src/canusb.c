@@ -64,7 +64,7 @@ void canusb_filter_id(unsigned short id)
 	char mask_cmd[] = "m00000010\r"; //Ignore RTR bit
 	id <<= 5;
 
-	sprintf(code_cmd+5, "%03x", id);
+	sprintf(code_cmd+5, "%03X", id);
 
 	canusb_send_cmd(code_cmd);
 	canusb_send_cmd(mask_cmd);
