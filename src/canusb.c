@@ -139,7 +139,7 @@ void canusb_filter_id(unsigned short id)
 	canusb_send_cmd(mask_cmd);
 	*/
 	//don't use filter1 (all fields 0)
-	//filter2 id must match exactly (all bits 0)
+	//filter2 id must match exactly (all idmask2 bits 0)
 	//ignore filter2's rtr bit (rtrmask2 = 1)
 	canusb_set_filter11(0x000, 0x000, 0x0, 0x0, 0x00, 0x00, id, 0x000, 0x0, 0x1);
 }
