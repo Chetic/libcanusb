@@ -18,6 +18,7 @@ extern void canusb_reset(void);
 extern int canusb_init(char* portname);
 extern int canusb_send_cmd(char* cmd);
 
+extern void canusb_set_filter11(int id, int idmask, int rtr, int rtrmask, int data, int datamask, int id2, int idmask2, int rtr2, int rtrmask2);
 /** Set adapter to only print CAN messages with ID 'id'. Only supports 11-bit identifiers */
 extern void canusb_filter_id(unsigned short id);
 
