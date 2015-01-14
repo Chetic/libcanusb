@@ -58,8 +58,77 @@ int canusb_send_cmd(char* cmd)
 	printf("]\n");
 }
 
+void canusb_set_filter11(int id, int idmask, int rtr, int rtrmask, int data, int datamask, int id2, int idmask2, int rtr2, int rtrmask2)
+{
+	/*
+	organizational:
+	I = ID
+	R = RTR
+	D = Data
+
+	filter 1	.Reg0    .Reg1.  .Reg1.Reg3.
+			 76543210 7654    3210 3210
+
+			 IIIIIIII IIIR    DDDD DDDD
+
+			 76543210 7654
+	filter 2	.Reg2    .Reg3.
+
+
+	raw bytes:
+	.Reg0    .Reg1    .Reg2    .Reg3    .   <- register
+	 76543210 76543210 76543210 76543210    <- register bit
+	 IIIIIIII IIIRDDDD IIIIIIII IIIRDDDD    <- meaning
+	 11111111 11111111 22222222 22221111	<- filter #
+
+	*/
+
+	//filter 1
+	//use only 11 bits
+	id = id & 0x7FF;
+	idmask = idmask & 0x7FF;
+
+	//use only 1 bit
+	rtr = rtr & 0x1;
+	rtrmask = rtrmask & 0x1;
+
+	//use only 8 bits
+	data = data & 0xFF;
+	datamask = datamask & 0xFF;
+	//split data and datamask up into high/low nibbles since that's how they are packed
+	int datahigh = (data & 0xF0) >> 4;
+	int datalow = data & 0xF;
+	int datamaskhigh = (datamask & 0xF0) >> 4;
+	int datamasklow = datamask & 0xF;
+
+
+	//filter 2
+	//use only 11 bits
+	id2 = id2 & 0x7FF;
+	idmask2 = idmask2 & 0x7FF;
+
+	//use only 1 bit
+	rtr2 = rtr2 & 0x1;
+	rtrmask2 = rtrmask2 & 0x1;
+
+
+	//code
+	int ACR = (id << 21) | (rtr << 20) | (datahigh << 16) | (id2 << 5) | (rtr2 << 4) | datalow;
+	//mask
+	int ACM = (idmask << 21) | (rtrmask << 20) | (datamaskhigh << 16) | (idmask2 << 5) | (rtrmask2 << 4) | datamasklow;
+
+	char cACR[16];
+	char cACM[16];
+	snprintf(cACR, sizeof cACR, "M%08X\r", ACR);
+	snprintf(cACM, sizeof cACM, "m%08X\r", ACM);
+
+	canusb_send_cmd(cACR);
+	canusb_send_cmd(cACM);
+}
+
 void canusb_filter_id(unsigned short id)
 {
+	/* edit cm
 	char code_cmd[] = "M00000000\r";
 	char mask_cmd[] = "m00000010\r"; //Ignore RTR bit
 	id <<= 5;
@@ -68,6 +137,11 @@ void canusb_filter_id(unsigned short id)
 
 	canusb_send_cmd(code_cmd);
 	canusb_send_cmd(mask_cmd);
+	*/
+	//don't use filter1 (all fields 0)
+	//filter2 id must match exactly (all bits 0)
+	//ignore filter2's rtr bit (rtrmask2 = 1)
+	canusb_set_filter11(0x000, 0x000, 0x0, 0x0, 0x00, 0x00, id, 0x000, 0x0, 0x1);
 }
 
 void canusb_print_version(void)
