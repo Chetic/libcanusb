@@ -8,6 +8,7 @@ An example application can be found at https://github.com/Chetic/btmis
 
 Dependencies
 ------------
+- http://www.ftdichip.com/Drivers/D2XX.htm
 Raspberry Pi running Arch:
 > pacman -S gcc make
 
