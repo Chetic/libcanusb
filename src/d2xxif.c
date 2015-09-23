@@ -31,7 +31,7 @@ bool getVersionInfo(FT_HANDLE ftHandle, char* str)
 
   sprintf( buf, "V\r" );
   if ( FT_OK != ( status = FT_Write( ftHandle, buf, strlen( buf ), &nBytesWritten ) ) ) {
-    printf("Error: Failed to write command. return code = %d\n", status );
+    printf("Error: Failed to write command. return code = %d\n", (int)status );
     return false;
   }
   
@@ -41,7 +41,7 @@ bool getVersionInfo(FT_HANDLE ftHandle, char* str)
       // If there are characters to receive
       if ( nRxCnt ) {
 	if ( FT_OK != ( status = FT_Read( ftHandle, buf, nRxCnt, &nBytesWritten ) ) ) {
-	  printf("Error: Failed to read data. return code = %d\n", status );
+	  printf("Error: Failed to read data. return code = %d\n", (int)status );
 	  return false;
 	}
 	
@@ -58,7 +58,7 @@ bool getVersionInfo(FT_HANDLE ftHandle, char* str)
       }
     }
     else {
-      printf("Error: Failed to get status. return code = %d\n", status );
+      printf("Error: Failed to get status. return code = %d\n", (int)status );
       return false;
     }
   }
@@ -81,7 +81,7 @@ bool getSerialNumber(FT_HANDLE ftHandle, char* str)
 
   sprintf( buf, "N\r" );
   if ( FT_OK != ( status = FT_Write( ftHandle, buf, strlen( buf ), &nBytesWritten ) ) ) {
-    printf("Error: Failed to write command. return code = %d\n", status );
+    printf("Error: Failed to write command. return code = %d\n", (int)status );
     return false;
   }
   
@@ -91,7 +91,7 @@ bool getSerialNumber(FT_HANDLE ftHandle, char* str)
       // If there are characters to receive
       if ( nRxCnt ) {
 	if ( FT_OK != ( status = FT_Read( ftHandle, buf, nRxCnt, &nBytesWritten ) ) ) {
-	  printf("Error: Failed to read data. return code = %d\n", status );
+	  printf("Error: Failed to read data. return code = %d\n", (int)status );
 	  return false;
 	}
 	
@@ -108,7 +108,7 @@ bool getSerialNumber(FT_HANDLE ftHandle, char* str)
       }
     }
     else {
-      printf("Error: Failed to get status. return code = %d\n", status);
+      printf("Error: Failed to get status. return code = %d\n", (int)status);
       return false;
     }
   }
@@ -180,20 +180,20 @@ bool sendFrame( FT_HANDLE ftHandle, CANMsg *pmsg )
 
   if ( pmsg->flags & CANMSG_EXTENDED ) {
     if ( pmsg->flags & CANMSG_RTR ) {
-      sprintf( txbuf, "R%08.8lX%i", pmsg->id, pmsg->len );
+      sprintf( txbuf, "R%8.8lX%i", pmsg->id, pmsg->len );
       pmsg->len = 0; 
     }
     else {
-      sprintf( txbuf, "T%08.8lX%i", pmsg->id, pmsg->len );
+      sprintf( txbuf, "T%8.8lX%i", pmsg->id, pmsg->len );
     }
   }
   else {
     if ( pmsg->flags & CANMSG_RTR ) {
-      sprintf( txbuf, "r%03.3lX%i", pmsg->id, pmsg->len );
+      sprintf( txbuf, "r%3.3lX%i", pmsg->id, pmsg->len );
       pmsg->len = 0; // Just dlc no data for RTR
     }
     else {
-      sprintf( txbuf, "t%03.3lX%i", pmsg->id, pmsg->len );
+      sprintf( txbuf, "t%3.3lX%i", pmsg->id, pmsg->len );
     }
   }
 
@@ -201,7 +201,7 @@ bool sendFrame( FT_HANDLE ftHandle, CANMsg *pmsg )
     char hex[5];
     
     for ( i= 0; i< pmsg->len; i++ ) {
-      sprintf( hex, "%02.2X", pmsg->data[i] );
+      sprintf( hex, "%2.2X", pmsg->data[i] );
       strcat( txbuf, hex );
     }
   }
@@ -362,7 +362,7 @@ bool readFrame( FT_HANDLE ftHandle, CANMsg *frame )
 	    if ( 0x0d == c ) {
 	   
 	      printf("Raw Msg = %s\n", msgReceiveBuf );
-	      if ( !canusbToCanMsg( msgReceiveBuf, &msg ) ) {
+	      if ( !canusbToCanMsg( (CANMsg*)msgReceiveBuf, (char*)&msg ) ) {
 		printf("Message conversion failed!\n");
 		state = CANUSB_STATE_NONE;
 		return false;
@@ -376,9 +376,9 @@ bool readFrame( FT_HANDLE ftHandle, CANMsg *frame )
 	      }
 
 	      printf("message received: id=%X len=%d timestamp=%X ", 
-		     msg.id, 
-		     msg.len, 
-		     msg.timestamp ); 
+		     (unsigned int)msg.id, 
+		     (unsigned int)msg.len, 
+		     (unsigned int)msg.timestamp ); 
 	      
 	      if ( msg.len ) {
 		
