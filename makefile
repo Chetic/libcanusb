@@ -4,7 +4,7 @@ LD := gcc
 AR := ar
 CCFLAGS := -c -ggdb -O0
 LDFLAGS := -g -Llib
-LIB_OBJS := obj/d2xxif.o obj/canusbnew.o
+LIB_OBJS := obj/d2xxif.o obj/canusb.o
 
 all: obj bin lib lib/libcanusb.a
 
@@ -15,9 +15,10 @@ obj bin lib:
 	mkdir -p $@
 
 clean:
-	rm -rf bin || :
-	rm -rf obj || :
-	rm -rf lib || :
+	rm -rf bin     || :
+	rm -rf obj     || :
+	rm -rf lib     || :
+	rm -rf include || :
 
 obj/%.o: src/%.c
 	$(CC) $(CCFLAGS) $^ -o $@

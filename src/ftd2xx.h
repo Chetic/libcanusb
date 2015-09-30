@@ -832,12 +832,5 @@ FT_STATUS WINAPI FT_GetDeviceInfoDetail(
 #ifdef __cplusplus
 }
 #endif
-
-
 #endif  /* FTD2XX_H */
-
-
-
-
-
 

@@ -1,5 +1,10 @@
+#ifndef CANUSB_H
+#define CANUSB_H
+
 #define SERIAL_BUFFER_LENGTH 1024
 #define CANFRAME_BUFFER_LENGTH 128
+
+#include "d2xxif.h"
 
 // id - 2 bytes & 0x0FFF
 // length - 1 byte
@@ -24,4 +29,5 @@ extern void canusb_print_version(void);
 extern void canusb_print_serial_number(void);
 extern void canusb_enable_timestamps(void);
 extern void canusb_disable_timestamps(void);
+#endif
 

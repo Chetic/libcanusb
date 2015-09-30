@@ -1,3 +1,6 @@
+#ifndef D2XXIF_H
+#define D2XXIF_H
+
 #include <stdbool.h>
 #include "ftd2xx.h"
 
@@ -33,4 +36,5 @@ bool canusbToCanMsg(CANMsg *pMsg, char* str);
 
 // Read a frame from the buffer and place it in frame pointed to by 'frame'
 bool readFrame(FT_HANDLE ftHandle, CANMsg *frame);
+#endif
 

@@ -1,5 +1,6 @@
 #include "d2xxif.h"
 #include "canusb.h"
+#include <stdio.h>
 
 static FT_STATUS ftStatus;
 static FT_HANDLE ftHandle;
@@ -11,6 +12,7 @@ int canusb_init(int iport)
 {
   int i;
   char c;
+  int init_failed = 0;
  
   // Note!
   // The second version of open should work from version 0.4.9 it may be prefered
@@ -19,25 +21,26 @@ int canusb_init(int iport)
   //ftStatus = FT_OpenEx( "LWO65RKA", FT_OPEN_BY_SERIAL_NUMBER, &ftHandle);
   //ftStatus = FT_OpenEx( NULL, FT_OPEN_BY_SERIAL_NUMBER, &ftHandle); // First found
   if(ftStatus != FT_OK) {
-    /* 
-       This can fail if the ftdi_sio driver is loaded
+    /* This can fail if the ftdi_sio driver is loaded
        use lsmod to check this and rmmod ftdi_sio to remove
-       also rmmod usbserial
-    */
-    printf("FT_Open(%d) failed. rv=%d\n", iport, ftStatus);
+       also rmmod usbserial */
+    printf("FT_Open(%d) failed. rv=%d\n", iport, (int)ftStatus);
     return 1;
   }
 
-  FT_SetTimeouts(ftHandle, 3000, 3000 );       // 3 second read timeout
+  ftStatus = FT_SetTimeouts(ftHandle, 3000, 3000 ); // 3 second read timeout
+  if(ftStatus != FT_OK) {
+    printf("WARNING: FT_SetTimeouts failed. ftStatus=%d\n", (int)ftStatus);
+  }
      
   while ( 0x0a == ( c = getchar() ));
 
   if (filtersConfigured) {
-    sendDeviceMsg(ftHandle, strACR);
-    sendDeviceMsg(ftHandle, strACM);
+	init_failed |= sendDeviceMsg(ftHandle, strACR);
+	init_failed |= sendDeviceMsg(ftHandle, strACM);
   }
 
-  return 0;
+  return init_failed;
 }
 
 void canusb_close(void)
