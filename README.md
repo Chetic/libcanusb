@@ -2,7 +2,7 @@ libcanusb
 =========
 Library for communicating with CANUSB adapters http://www.can232.com/canusb/
 
-Currently only supports VCP (virtual serial port) mode, but D2XX support is planned.
+Currently only supports VCP (virtual serial port) mode.
 
 An example application can be found at https://github.com/Chetic/btmis
 
